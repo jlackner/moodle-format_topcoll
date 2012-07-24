@@ -95,7 +95,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
                         } else {
                             $topictext = get_string('setlayoutstructureday', 'format_topcoll');
                         }
-
+                       
                         $o = html_writer::tag('span', $topictext . '<br />' . $section->section, array('class' => 'cps_centre'));
                         break;
                 }
@@ -226,30 +226,55 @@ class format_topcoll_renderer extends format_section_renderer_base {
                 $o.= html_writer::start_tag('div', array('class' => 'sectionhead toggle', 'id' => 'toggle-' . $section->section));
 
                 $title = get_section_name($course, $section);
-                if ((string) $section->name == '') { // Name is empty.
-                    $o.= html_writer::start_tag('a', array('class' => 'cps_noname cps_a', 'href' => '#', 'onclick' => 'toggle_topic(this,' . $section->section . '); return false;'));
-                    $o.= $title;
-                    switch ($tcsetting->layoutelement) {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            $o.= ' - ' . $toggletext;
-                            break;
-                    }
-                } else {
-                    $o.= html_writer::start_tag('a', array('class' => 'cps_a', 'href' => '#', 'onclick' => 'toggle_topic(this,' . $section->section . '); return false;'));
-                    $o.= $title;
-                    switch ($tcsetting->layoutelement) {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            $o.= ' - ' . $toggletext;
-                            break;
-                    }
-                    //$o.='<br />' . $section->summary;
+                    
+                $fields=array('class' => 'cps_a', 'href' => '#', 'onclick' => 'toggle_topic(this,' . $section->section . '); return false;');
+                /**********************************
+                 echo '<tr class="cps" id="sectionhead-' . $section . '">';
+                echo '<tr class="cps" id="sectionhead-' . $section . '">';
+                
+                $sectionmods = explode(",", $thissection->sequence);
+                $completions=0;
+                $complete=0;
+                foreach ($sectionmods as $modnumber) {
+                if (empty($mods[$modnumber])) {
+                continue;
                 }
+                $mod = $mods[$modnumber];
+                if ($completioninfo->is_enabled($mod))
+                	$completions++;
+                $completiondata = $completioninfo->get_data($mod,true);
+                if ($completiondata->completionstate==COMPLETION_COMPLETE)
+                	$complete++;
+                }
+                if ($completions!=0){
+                if ($completions==$complete){
+                $header_class="cps_complete";
+                }elseif($complete==0){
+                $header_class="cps_unstarted";
+                }else{
+                $header_class="cps_incomplete";
+                }
+                echo "<TD class=\"$header_class\">&nbsp;&nbsp;$complete/$completions</TD>";
+                }else{
+                $header_class="cps";
+                echo "<TD class=\"cps\"/>";
+                }
+                **********************************/
+                if ((string) $section->name == '') { // Name is empty.
+                	$fields["class"].=" cps_noname";
+                }
+                
+                $o.= html_writer::start_tag('a', $fields);
+                $o.= $title;
+                switch ($tcsetting->layoutelement) {
+	               	case 1:
+                	case 2:
+                	case 3:
+                	case 4:
+                		$o.= ' - ' . $toggletext;
+                		break;
+                }
+                
                 if ($PAGE->user_is_editing() && has_capability('moodle/course:update', $context)) {
                     $url = new moodle_url('/course/editsection.php', array('id' => $section->id));
 

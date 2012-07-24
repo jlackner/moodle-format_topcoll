@@ -157,9 +157,7 @@ function toggleexacttopic(target,image,toggleNum,reloading,savetoggles)  // Togg
             }
 
             // Save the toggle!
-            if (reloading == false) {
-			    togglebinary(toggleNum,"1",savetoggles);
-			}
+            if (reloading == false) togglebinary(toggleNum,"1",savetoggles);
         }
     }
 }

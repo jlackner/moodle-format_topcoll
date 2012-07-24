@@ -90,6 +90,18 @@
     font-size: 0.7em;
 }  
 
+.course-content ul.topics li.section .content .toggle a.cps_unstarted{
+  background-color: #F1D1D1;
+}
+ 
+.course-content ul.topics li.section .content .toggle a.cps_incomplete {
+  background-color: #FBE7BF;
+}
+
+.course-content ul.topics li.section .content .toggle a.cps_complete {
+  background-color: #DAEDDA;
+}
+
 .course-content ul.topics li.section .content .toggle {
     width: 100%;
 }
