@@ -91,15 +91,15 @@
 }  
 
 .course-content ul.topics li.section .content .toggle a.cps_unstarted{
-  background-color: #F1D1D1;
+  background-color: #F1D1D1 !important;
 }
  
 .course-content ul.topics li.section .content .toggle a.cps_incomplete {
-  background-color: #FBE7BF;
+  background-color: #FBE7BF !important;
 }
 
 .course-content ul.topics li.section .content .toggle a.cps_complete {
-  background-color: #DAEDDA;
+  background-color: #DAEDDA !important;
 }
 
 .course-content ul.topics li.section .content .toggle {
