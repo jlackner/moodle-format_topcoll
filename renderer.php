@@ -264,6 +264,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
 				$o.= html_writer::start_tag('a', $fields);
 				if ($completions!=0)
 					$o.='&nbsp;&nbsp;'.$complete."/".$completions."&nbsp;&nbsp;";
+
 				$o.= $title;
 				switch ($tcsetting->layoutelement) {
 					case 1:
