@@ -39,7 +39,7 @@ $string['topcolltoggle'] = 'Toggle';
 $string['topcollsidewidth'] = '28px';
 
 // Toggle all - Moodle Tracker CONTRIB-3190
-$string['topcollall'] = 'all toggles.';
+$string['topcollall'] = 'all sections.';
 $string['topcollopened'] = 'Open';
 $string['topcollclosed'] = 'Close';
 
@@ -55,9 +55,13 @@ $string['page-course-view-topcoll-x'] = 'Any course page in the collapsed topics
 // Moodle 2.3 Enhancement
 $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
+$string['currentsection'] = 'This section';
+$string['markedthissection'] = 'This section is highlighted as the current section';
+$string['markthissection'] = 'Highlight this section as the current section';
 
 // Layout enhancement - Moodle Tracker CONTRIB-3378
 $string['formatsettings'] = 'Format settings'; // CONTRIB-3529
+$string['formatsettingsinformation'] = '<br />To change the settings of the course format, click on the icon to the right.';
 $string['setlayout'] = 'Set layout';
 $string['setlayout_default'] = 'Default';
 $string['setlayout_no_toggle_section_x'] = 'No toggle section x';

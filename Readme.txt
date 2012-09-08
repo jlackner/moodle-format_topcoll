@@ -6,52 +6,41 @@ This version works with Moodle 2.3.1 Build: 20120706 and above until the next re
 
 Documented on http://docs.moodle.org/23/en/Collapsed_Topics_course_format
 
-New features for this Moodle 2.3.1 version
-------------------------------------------
-1. One to four columns which can be set on the Collapsed Topics settings form (one column for MyMobile users 
-   regardless of this setting).
-2. Persistence now uses user preferences on the server which facilitates remembrance beyond the session and
-   removal of the evil cookie.
-3. Administrators can now reset the layout and colours of all Collapsed Topics courses via the settings form.
-4. New 'Days' structure which has each section as a day.  The first section is the day of the start date.
-5. Removed the use of tables for layout and now using more conventional div's and unordered lists which should
-   be better for theme compatibility.
-6. A slight reworking to operate with the MyMobile theme - a few issues to resolve, please see 'Known Issues' below.
-7. When the course layout setting is "Show one section per page" in the course settings then the toggles are not
-   displayed as each section just contains a link to the section with the content.  But when editing toggles are
-   shown as the section contains the content.  The column functionality is implemented in both instances.
-
 Installation
 ------------
- 1. If upgrading from a previous version of Moodle please see 'Upgrading from Moodle 1.9, 2.0, 2.1' and
+ 1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
+    format relies on underlying core code that is out of my control.
+ 2. If upgrading from a previous version of Moodle please see 'Upgrading from Moodle 1.9, 2.0, 2.1' and
     'Upgrading from Moodle 2.2.x' below.
- 2. Put Moodle in 'Maintenance Mode' (docs.moodle.org/en/admin/setting/maintenancemode) so that there are no 
+ 3. Put Moodle in 'Maintenance Mode' (docs.moodle.org/en/admin/setting/maintenancemode) so that there are no 
     users using it bar you as the administrator - if you have not already done so.
- 3. Copy 'topcoll' to '/course/format/' if you have not already done so.
- 4. If using a Unix based system, chmod 755 on config.php - I have not tested this but have been told that it
+ 4. Copy 'topcoll' to '/course/format/' if you have not already done so.
+ 5. If using a Unix based system, chmod 755 on config.php - I have not tested this but have been told that it
     needs to be done.
- 5. In 'config.php' change the values of '$TCCFG->defaultlayoutelement', '$TCCFG->defaultlayoutstructure' and
+ 6. In 'config.php' change the values of '$TCCFG->defaultlayoutelement', '$TCCFG->defaultlayoutstructure' and
     '$TCCFG->defaultlayoutcolumns' for setting the default layout, structure and columns respectively for
-	new / updating courses as desired by following the instructions contained within.
- 6. In 'config.php' change the values of '$TCCFG->defaulttgfgcolour', '$TCCFG->defaulttgbgcolour' and
+    new / updating courses as desired by following the instructions contained within.
+ 7. In 'config.php' change the values of '$TCCFG->defaulttgfgcolour', '$TCCFG->defaulttgbgcolour' and
     '$TCCFG->defaulttgbghvrcolour' for setting the default toggle colours.
- 7. Login as an administrator and follow standard the 'plugin' update notification.  If needed, go to
+ 8. Login as an administrator and follow standard the 'plugin' update notification.  If needed, go to
     'Site administration' -> 'Notifications' if this does not happen.
- 8.  If desired, edit the colours of the 'styles.css' - which contains instructions on how to have per theme colours.
- 9.  To change the arrow graphic you need to replace 'arrow_up.png' and 'arrow_down.png'.  Reuse the graphics
+ 9.  If desired, edit the colours of the 'styles.css' - which contains instructions on how to have per theme colours.
+10.  To change the arrow graphic you need to replace 'arrow_up.png' and 'arrow_down.png'.  Reuse the graphics
      if you want.  Created in Paint.Net.
-10.  Put Moodle out of Maintenance Mode.
+11.  Put Moodle out of Maintenance Mode.
 
 Upgrade Instructions
 --------------------
-1. If upgrading from a previous version of Moodle please see 'Upgrading from Moodle 1.9, 2.0 or 2.1' and
+1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
+   format relies on underlying core code that is out of my control.
+2. If upgrading from a previous version of Moodle please see 'Upgrading from Moodle 1.9, 2.0 or 2.1' and
    'Upgrading from Moodle 2.2' below.
-2. Put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
-3. In '/course/format/' move old 'topcoll' directory to a backup folder outside of Moodle.
-4. If you have previously installed a development, beta or release candidate of version 2.3.7 you need to
+3. Put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
+4. In '/course/format/' move old 'topcoll' directory to a backup folder outside of Moodle.
+5. If you have previously installed a development, beta or release candidate of version 2.3.7 you need to
    perform step 4 in 'Uninstallation' below.
-5. Follow installation instructions above.
-6. Put Moodle out of Maintenance Mode.
+6. Follow installation instructions above.
+7. Put Moodle out of Maintenance Mode.
 
 Upgrading from Moodle 1.9, 2.0 or 2.1
 -------------------------------------
@@ -84,12 +73,12 @@ Upgrading from Moodle 2.2.x
 NOTE: If the automated upgrade fails for which can be seen by getting errors when using a Collapsed Topics course,
       then please follow this.
       Please carry on if a table / field has been removed / changed / already exists as it should still work - this 
-	  is to cope with the different possible scenarios.  These instructions are written with the MySQL database in
-	  mind, however should work with other database engines but the types should be compared with other tables in 
-	  the database to get an idea of what they should be.  If possible please kindly feedback to me any additional
-	  information you discover so I can update these instructions - contact details at the very bottom.
-	  The table prefix i.e, 'mdl_' is not stated in the instructions but ensure you know what yours is and use
-	  it with the table names.
+      is to cope with the different possible scenarios.  These instructions are written with the MySQL database in
+      mind, however should work with other database engines but the types should be compared with other tables in 
+      the database to get an idea of what they should be.  If possible please kindly feedback to me any additional
+      information you discover so I can update these instructions - contact details at the very bottom.
+      The table prefix i.e, 'mdl_' is not stated in the instructions but ensure you know what yours is and use
+      it with the table names.
 1.    In your database:
 2.1   Rename the table 'format_topcoll_layout' to 'format_topcoll_settings'.
 2.2   With the table 'format_topcoll_settings' change all integer types to signed if using a MySQL database.
@@ -152,10 +141,10 @@ Known Issues
     information on http://moodle.org/mod/forum/discuss.php?d=184150.
 2.  The MyMobile theme is not quite as implemented as the previous versions but does work, please see http://tracker.moodle.org/browse/MDL-33115.
     Also has a tendency not to reload the toggle state or set the arrow icon on first load.  A page refresh fixes it - something to do with the inclusion
-	of a '#' in the url.  I have contacted 'John Stabinger' on 'MDL-33115' and he will be looking into it.
+    of a '#' in the url.  I have contacted 'John Stabinger' on 'MDL-33115' and he will be looking into it.
 3.  Importing a Moodle 1.9 course does not currently work, please see CONTRIB-3552 which depends on MDL-32205 - as
     a workaround, please select the 'Topics' format first in 1.9, backup and restore then select the Collapsed Topics
-	course format in the course settings.  You will have to reset your decisions on structure etc.
+    course format in the course settings.  You will have to reset your decisions on structure etc.
 
 Version Information
 -------------------
@@ -469,7 +458,7 @@ NOTE: If uninstallation fails, drop the table 'format_topcoll_layout' and the en
   2. Removed cookie consent code from lib.php.
   3. To keep things clean for what will be a fresh install for all I have decided to remove the update code in update.php,
      so if you have previously installed a beta version please kindly follow step 4 of the 'Uninstallation Instructions' above
-	 after updating your code but before clicking on 'Notifications' to 'upgrade'.
+     after updating your code but before clicking on 'Notifications' to 'upgrade'.
   4. Request from Kyle Smith to implement the functionality of being able to reset to defaults for all Collapsed Topics courses.  I have made this for admins only.
   5. Added in multi-column functionality as a layout setting.  Default in config.php.  Can have one to four columns.
 
@@ -501,9 +490,37 @@ NOTE: If uninstallation fails, drop the table 'format_topcoll_layout' and the en
   2. Fixed an issue with section zero summary not showing - thanks Chris Adams on http://moodle.org/mod/forum/discuss.php?d=206423
   3. Attempted automated upgrade in 'upgrade.php' to cope with issues users are experiencing.  Altered upgrade from
      Moodle 1.9, 2.0, 2.1 and 2.2 instructions to reflect this.  Version control for older versions less than Moodle 2.3
-	 needs to follow a 'branching date' strategy for this to work properly (http://moodle.org/mod/forum/discuss.php?d=206647#p901061).
-	 This was sparked by CONTRIB-3765.
+     needs to follow a 'branching date' strategy for this to work properly (http://moodle.org/mod/forum/discuss.php?d=206647#p901061).
+     This was sparked by CONTRIB-3765.
   4. Tidied up and clarified the instructions for upgrading.
+
+1st August 2012 - Version 2.3.7.2
+  1. Changes to 'renderer.php' because of MDL-33767.
+  2. Tidied up some of the logic in 'renderer.php'.
+  3. Made 'format.php' more adaptable to old style section 'x' only urls.
+  4. Made inclusion of 'config.php' in 'lib.php' more precise.
+  5. Removed 'callback_topcoll_get_section_url' in 'lib.php' because it is no longer required by
+     'load_generic_course_sections' in '/lib/navigationlib.php'.
+  6. Added 'currentsection' string to '/lang/en/format_topcoll.php' - thanks to Carlos Kiyan Tsunami on
+     http://moodle.org/mod/forum/discuss.php?d=208066.
+  7. Shrunk the settings icon to 75% of the original size so that it is not so 'in your face' and added
+     instructions on the left.  The instructions are in the 'en' langauge file as the 'formatsettingsinformation'
+     string for translation.
+ 
+30th August 2012 - Version 2.3.7.3
+  1. Changes to 'renderer.php' because of MDL-28207 - thus requiring Moodle 2.3.1 2012062501.09 (Build: 20120809).
+  2. Implemented MDL-34798 which I reported for AJAX section moving.
+  3. Integrated CONTRIB-3827 to fix proliferation of CSS styles across other course formats.
+  4. Change to 'format.php' because of MDL-34829.
+  5. Sorted wording of 'light bulb' when editing.
+  6. Integrated CONTRIB-3825 to fix upgrade issue when converting a non-MySQL the database.
+  7. Implemented MDL-34858 which I reported as a section zero default name issue.
+  8. Implemented MDL-34917 which I reported as an improvement.
+  9. Make toggle titles bold and change 'all toggles' to 'all sections', from comments made on MDL-35048.
+ 10. Cherry picked Luiggi's change https://github.com/luiggisanso/moodle-format_topcoll/commit/9bd818f5a4efb347aef4f5154ea2930526552bfc
+
+2nd August 2012 - Version 2.4.0.1
+  1. Alpha started development of Moodle 2.4 version.
 
 Thanks
 ------
@@ -556,6 +573,6 @@ Desired Enhancements
 --------------------
 1. Smoother animated toggle action.
 
-G J Barnard MSc. BSc(Hons)(Sndw). MBCS. CEng. CITP. PGCE. - 11th July 2012.
+G J Barnard MSc. BSc(Hons)(Sndw). MBCS. CEng. CITP. PGCE. - 30th August 2012.
 Moodle profile: moodle.org/user/profile.php?id=442195.
 Web profile   : about.me/gjbarnard
