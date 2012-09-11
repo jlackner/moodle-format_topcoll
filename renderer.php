@@ -198,7 +198,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
      * @param int $sectionreturn The section to return to after an action
 	 * @return string HTML to output.
 	 */
-    protected function section_header($section, $course, $onsectionpage, $sectionreturn = 0) {
+    protected function section_header($section, $course, $onsectionpage, $sectionreturn = 0,$mods=0) {
 		$o = '';
 		global $PAGE;
 
@@ -216,7 +216,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
 				$sectionstyle = ' current';
 			}
 		}
-
+		
         $o .= html_writer::start_tag('li', array('id' => 'section-' . $section->section,
 				'class' => 'section main clearfix' . $sectionstyle));
 
@@ -236,35 +236,44 @@ class format_topcoll_renderer extends format_section_renderer_base {
             $o .= html_writer::start_tag('div', array('class' => 'sectionhead toggle', 'id' => 'toggle-' . $section->section));
 
             $title = get_section_name($course, $section);
-            $toggleclass = 'cps_a';
+            $toggleclass = 'toggle_closed';
             if ((string) $section->name == '') { // Name is empty.
                 $toggleclass .= ' cps_noname';
             }
-            $o .= html_writer::start_tag('a', array('class' => $toggleclass, 'href' => '#', 'onclick' => 'toggle_topic(this,' . $section->section . '); return false;'));
-					if ($completioninfo->is_enabled($mod)){
-						//echo "\$completioninfo->is_enabled<BR/>";
-						$completions++;
-					}
-					$completiondata = $completioninfo->get_data($mod,true);
-					if ($completiondata->completionstate==COMPLETION_COMPLETE)
-						$complete++;
-				}
-				if ($completions!=0){
-					if ($completions==$complete){
-						$fields["class"].=" cps_complete";
-					}elseif($complete==0){
-						$fields["class"].=" cps_unstarted";
-					}
-				}
+            $fields=array('class' => $toggleclass, 'href' => '#', 'onclick' => 'toggle_topic(this,' . $section->section . '); return false;');
+            
+            $sectionmods = explode(",", $section->sequence);
+            $completioninfo = new completion_info($course);
+            $completions=0;
+            $complete=0;
 
-				if ((string) $section->name == '') { // Name is empty.
-					$fields["class"].=" cps_noname";
-				}
-
-				$o.= html_writer::start_tag('a', $fields);
-				if ($completions!=0)
-					$o.='&nbsp;&nbsp;'.$complete."/".$completions."&nbsp;&nbsp;";
-
+            foreach ($sectionmods as $modnumber) {
+            	if (empty($mods[$modnumber])) {
+            		continue;
+            	}
+            	$mod = $mods[$modnumber];
+            	if ($completioninfo->is_enabled($mod)){
+            		//echo "\$completioninfo->is_enabled<BR/>";
+            		$completions++;
+            	}
+            	$completiondata = $completioninfo->get_data($mod,true);
+            	if ($completiondata->completionstate==COMPLETION_COMPLETE) {
+            		$complete++;
+            	}
+            }
+            if ($completions!=0){
+            	if ($completions==$complete){
+            		$fields["class"].=" cps_complete";
+            	}elseif($complete==0){
+            		$fields["class"].=" cps_unstarted";
+            	}else{
+            		$fields["class"].=" cps_incomplete";
+            	}
+            }
+            
+            $o.= html_writer::start_tag('a', $fields);
+            if ($completions!=0)
+            	$o.='&nbsp;&nbsp;'.$complete."/".$completions."&nbsp;&nbsp;";
             $o .= $title;
             switch ($tcsetting->layoutelement) {
                 case 1:
@@ -303,7 +312,6 @@ class format_topcoll_renderer extends format_section_renderer_base {
             if ($hasnamesecpg) {
                 $o .= $this->output->heading($this->section_title($section, $course), 3, 'sectionname');
             }
-			//$o .= parent::section_header($section, $course, $onsectionpage);
             $o .= html_writer::start_tag('div', array('class' => 'summary'));
             $o .= $this->format_summary_text($section);
 
@@ -332,17 +340,18 @@ class format_topcoll_renderer extends format_section_renderer_base {
 
 	/**
      * Generate the html for the 'Jump to' menu on a single section page.
-     *
+     * Temporary until MDL-34917 in core.
      * @param stdClass $course The course entry from DB
      * @param array $sections The course_sections entries from the DB
+     * @param $displaysection the current displayed section number.
      *
      * @return string HTML to output.
      */
-    protected function section_nav_selection($course, $sections) {
+    protected function section_nav_selection($course, $sections, $displaysection) {
         $o = '';
         $section = 1;
         $sectionmenu = array();
-        $sectionmenu[0] = get_string('returntomaincoursepage');  // Section 0 is never jumped to and is therefore used to indicate the main page.
+        $sectionmenu[0] = get_string('maincoursepage','format_topcoll');  // Section 0 is never jumped to and is therefore used to indicate the main page.  And temporary until MDL-34917 in core.
         $context = context_course::instance($course->id);
         while ($section <= $course->numsections) {
             if (!empty($sections[$section])) {
@@ -360,14 +369,13 @@ class format_topcoll_renderer extends format_section_renderer_base {
             }
             $showsection = (has_capability('moodle/course:viewhiddensections', $context) or $thissection->visible or !$course->hiddensections);
 
-            if ($showsection) {
+            if (($showsection) && ($section != $displaysection)) {
                 $sectionmenu[$section] = get_section_name($course, $thissection);
             }
             $section++;
         }
 
         $select = new single_select(new moodle_url('/course/view.php', array('id'=>$course->id)), 'section', $sectionmenu);
-        $select->label = get_string('jumpto');
         $select->class = 'jumpmenu';
         $select->formid = 'sectionmenu';
         $o .= $this->output->render($select);
@@ -415,7 +423,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
         $thissection = $sections[0];
         if ($thissection->summary or $thissection->sequence or $PAGE->user_is_editing()) {
             echo $this->start_section_list();
-            echo $this->section_header($thissection, $course, true, $displaysection);
+            echo $this->section_header($thissection, $course, true, $displaysection,$mods);
             print_section($course, $thissection, $mods, $modnamesused, true, "100%", false, $displaysection);
             if ($PAGE->user_is_editing()) {
                 print_section_add_menus($course, 0, $modnames, false, false, $displaysection);
@@ -447,7 +455,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
 
         // The requested section page.
         $thissection = $sections[$displaysection];
-        echo $this->section_header($thissection, $course, true, $displaysection);
+        echo $this->section_header($thissection, $course, true, $displaysection,$mods);
         // Show completion help icon.
         $completioninfo = new completion_info($course);
         echo $completioninfo->display_help_icon();
@@ -464,7 +472,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
         $sectionbottomnav .= html_writer::start_tag('div', array('class' => 'section-navigation mdl-bottom'));
         $sectionbottomnav .= html_writer::tag('span', $sectionnavlinks['previous'], array('class' => 'mdl-left'));
         $sectionbottomnav .= html_writer::tag('span', $sectionnavlinks['next'], array('class' => 'mdl-right'));
-        $sectionbottomnav .= html_writer::tag('div', $this->section_nav_selection($course, $sections), array('class' => 'mdl-align'));
+        $sectionbottomnav .= html_writer::tag('div', $this->section_nav_selection($course, $sections, $displaysection), array('class' => 'mdl-align'));
         $sectionbottomnav .= html_writer::end_tag('div');
         echo $sectionbottomnav;
 
@@ -509,7 +517,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
 		$thissection = $sections[0];
 		unset($sections[0]);
 		if ($thissection->summary or $thissection->sequence or $PAGE->user_is_editing()) {
-			echo $this->section_header($thissection, $course, false,$mods);
+			echo $this->section_header($thissection, $course, false, false,$mods);
 			print_section($course, $thissection, $mods, $modnamesused, true);
 			if ($PAGE->user_is_editing()) {
 				print_section_add_menus($course, 0, $modnames);
@@ -652,7 +660,7 @@ class format_topcoll_renderer extends format_section_renderer_base {
 					// Display section summary only.
 					echo $this->section_summary($thissection, $course, $mods);
 				} else {
-					echo $this->section_header($thissection, $course, false,$mods);
+					echo $this->section_header($thissection, $course, false,false,$mods);
 					if ($thissection->uservisible) {
 						print_section($course, $thissection, $mods, $modnamesused);
 
